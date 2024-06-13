@@ -186,6 +186,7 @@
                 type: 'text',
                 text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご性別：${formData.visitCount}\nメニュー：${formData.selectedSymptom}\n希望日時：\n ${formData.dates[0]}\n${formData.dates[1]}\n${formData.dates[2]}\nメッセージ：${formData.message}`
             }]).then(() => {
+                alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。 ' );
                 // LIFFウィンドウを閉じる
                 liff.closeWindow();
             }).catch((err) => {
