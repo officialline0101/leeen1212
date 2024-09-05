@@ -490,11 +490,11 @@ function selectDate(cell) {
             };
 
 // フォームデータのチェック
-if (!formData.name || !formData.phone || !formData.visitCount) {
+if (!formData.name || !formData.phone || !formData.visitCount|| !formData.selectedSymptom) {
     alert('お名前・電話番号・ご性別ご記入ください。');
     return;
 }
-
+            
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
