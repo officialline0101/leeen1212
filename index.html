@@ -569,6 +569,7 @@ function updateCalendar(availability, businessDays) {
         '16:00'
     ];
 
+    // 初回の場合、テーブルを生成する
     if (table.rows.length === 0) {
         for (const time of times) {
             const row = document.createElement('tr');
@@ -589,7 +590,7 @@ function updateCalendar(availability, businessDays) {
     // テーブルのヘッダーを更新
     updateCalendarHeader(currentDate);
 
-    // 各セルを空白にリセットし、クラスもリセット
+    // 各セルをリセット
     for (let row of table.rows) {
         for (let i = 1; i < row.cells.length; i++) {
             row.cells[i].textContent = '';
@@ -598,12 +599,12 @@ function updateCalendar(availability, businessDays) {
         }
     }
 
-    // テーブルの内容を更新
+    // 各日付に基づいてテーブルのセルを更新
     for (let i = 0; i < 7; i++) {
         const day = new Date(currentDate);
         day.setDate(day.getDate() + i);
 
-        let businessEventTimes = []; // 営業日のイベント時間帯を記録する配列
+        let businessEventTimes = []; // 営業日用
 
         availability.forEach(slot => {
             const eventStart = new Date(slot.startTime);
@@ -613,8 +614,9 @@ function updateCalendar(availability, businessDays) {
             }
         });
 
+        // 各時間帯を設定
         for (let j = 0; j < times.length; j++) {
-            const cell = table.rows[j].cells[i + 1];
+            const cell = table.rows[j].cells[i + 1]; // i+1で右側に進む
             const slotStart = new Date(day);
             slotStart.setHours(parseInt(times[j].split(':')[0]), parseInt(times[j].split(':')[1]), 0, 0);
 
@@ -641,28 +643,20 @@ function updateCalendar(availability, businessDays) {
                 return acc;
             }, 0);
 
-            // 営業日のイベント時間内に他のイベントがある場合
+            // 条件に応じたセルの内容設定
             if (isBusinessEventTime && count > 0) {
                 cell.textContent = '✕';
                 cell.classList.add('unavailable');
-            }
-            // 営業日のイベント時間（他のイベントがない場合）
-            else if (isBusinessEventTime) {
+            } else if (isBusinessEventTime) {
                 cell.textContent = '◯';
                 cell.classList.add('available');
-            }
-            // 日曜日で、営業日ではない場合
-            else if (slotStart.getDay() === 0 && !isBusinessDay && businessEventTimes.length === 0) {
+            } else if (slotStart.getDay() === 0 && !isBusinessDay && businessEventTimes.length === 0) {
                 cell.textContent = '✕';
                 cell.classList.add('unavailable');
-            }
-            // 営業日でかつ他のイベントがない場合
-            else if (isBusinessDay && count === 0) {
+            } else if (isBusinessDay && count === 0) {
                 cell.textContent = '◯';
                 cell.classList.add('available');
-            }
-            // それ以外の条件
-            else if (count === 0) {
+            } else if (count === 0) {
                 cell.textContent = '◯';
                 cell.classList.add('available');
             } else {
@@ -673,17 +667,15 @@ function updateCalendar(availability, businessDays) {
             cell.setAttribute('data-date', slotStart.toISOString());
         }
 
-        // ×と×の間のセル数が3未満の場合、その間のセルを×にする
+        // ×と×の間のセル数が3未満の場合、その間のセルを×にする処理
         for (let j = 0; j < times.length - 1; j++) {
             let start = -1;
             let end = -1;
 
-            // ×の開始位置を見つける
             if (table.rows[j].cells[i + 1].textContent === '✕') {
                 start = j;
             }
 
-            // その次の×を見つける
             for (let k = j + 1; k < times.length; k++) {
                 if (table.rows[k].cells[i + 1].textContent === '✕') {
                     end = k;
@@ -691,7 +683,6 @@ function updateCalendar(availability, businessDays) {
                 }
             }
 
-            // ×と×の間のセル数が3未満の場合、その間のセルを×に変更
             if (start !== -1 && end !== -1 && end - start < 4) {
                 for (let k = start + 1; k < end; k++) {
                     const cell = table.rows[k].cells[i + 1];
@@ -701,27 +692,8 @@ function updateCalendar(availability, businessDays) {
                 }
             }
 
-            // 次のループで位置を調整
             if (end !== -1) {
                 j = end - 1; 
-            }
-        }
-    }
-
-    // ×と×の間のセル数が3未満の場合、その間のセルを×にする部分の後に以下を追加
-    for (let i = 0; i < 7; i++) {
-        const twentyOClockRow = times.indexOf('15:30');
-        const twentyOneOClockRow = times.indexOf('16:00');
-
-        for (let j = twentyOClockRow; j < times.length; j++) {
-            const cell = table.rows[j].cells[i + 1];
-            const aboveCell = table.rows[twentyOClockRow].cells[i + 1];
-            
-            // 15:30のセルに×がある場合、16:00のセルも×にする
-            if (aboveCell.textContent === '✕' && j >= twentyOneOClockRow) {
-                cell.textContent = '✕';
-                cell.classList.remove('available');
-                cell.classList.add('unavailable');
             }
         }
     }
