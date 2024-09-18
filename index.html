@@ -599,49 +599,56 @@ function updateCalendar(availability, businessDays) {
         }
     }
 
-    // 各日付に基づいてテーブルのセルを更新
-    for (let i = 0; i < 7; i++) {
-        const day = new Date(currentDate);
-        day.setDate(day.getDate() + i);
+    // 現在の日時を取得
+    const now = new Date();
 
-        let businessEventTimes = []; // 営業日用
+// 現在の日付が何曜日か取得 (0が日曜日, 1が月曜日...)
+const startDay = currentDate.getDay(); // 現在の曜日を取得
 
-        availability.forEach(slot => {
-            const eventStart = new Date(slot.startTime);
-            const eventEnd = new Date(slot.endTime);
-            if (eventStart.toDateString() === day.toDateString() && slot.title === "営業日") {
-                businessEventTimes.push({ start: eventStart, end: eventEnd });
-            }
+// テーブルの内容を更新
+for (let i = 0; i < 7; i++) {
+    const day = new Date(currentDate);
+    // 現在の曜日に合わせて開始日を調整
+    day.setDate(day.getDate() - startDay + i);
+
+    let businessEventTimes = []; // 営業日のイベント時間帯を記録する配列
+
+    availability.forEach(slot => {
+        const eventStart = new Date(slot.startTime);
+        const eventEnd = new Date(slot.endTime);
+        if (eventStart.toDateString() === day.toDateString() && slot.title === "営業日") {
+            businessEventTimes.push({ start: eventStart, end: eventEnd });
+        }
+    });
+
+    for (let j = 0; j < times.length; j++) {
+        const cell = table.rows[j].cells[i + 1];
+        const slotStart = new Date(day);
+        slotStart.setHours(parseInt(times[j].split(':')[0]), parseInt(times[j].split(':')[1]), 0, 0);
+
+        const slotEnd = new Date(slotStart);
+        slotEnd.setMinutes(slotStart.getMinutes() + 30);
+
+        const isBusinessDay = businessDays.some(businessDay => {
+            const businessDayStart = new Date(businessDay.start);
+            const businessDayEnd = new Date(businessDay.end);
+            return slotStart >= businessDayStart && slotEnd <= businessDayEnd;
         });
 
-        // 各時間帯を設定
-        for (let j = 0; j < times.length; j++) {
-            const cell = table.rows[j].cells[i + 1]; // i+1で右側に進む
-            const slotStart = new Date(day);
-            slotStart.setHours(parseInt(times[j].split(':')[0]), parseInt(times[j].split(':')[1]), 0, 0);
+        const isBusinessEventTime = businessEventTimes.some(event => {
+            return slotStart < event.end && event.start < slotEnd;
+        });
 
-            const slotEnd = new Date(slotStart);
-            slotEnd.setMinutes(slotStart.getMinutes() + 30);
+        const count = availability.reduce((acc, slot) => {
+            const eventStart = new Date(slot.startTime);
+            const eventEnd = new Date(slot.endTime);
 
-            const isBusinessDay = businessDays.some(businessDay => {
-                const businessDayStart = new Date(businessDay.start);
-                const businessDayEnd = new Date(businessDay.end);
-                return slotStart >= businessDayStart && slotEnd <= businessDayEnd;
-            });
+            if (eventStart < slotEnd && slotStart < eventEnd && slot.title !== "営業日") {
+                return acc + 1;
+            }
+            return acc;
+        }, 0);
 
-            const isBusinessEventTime = businessEventTimes.some(event => {
-                return slotStart < event.end && event.start < slotEnd;
-            });
-
-            const count = availability.reduce((acc, slot) => {
-                const eventStart = new Date(slot.startTime);
-                const eventEnd = new Date(slot.endTime);
-
-                if (eventStart < slotEnd && slotStart < eventEnd && slot.title !== "営業日") {
-                    return acc + 1;
-                }
-                return acc;
-            }, 0);
 
             // 条件に応じたセルの内容設定
             if (isBusinessEventTime && count > 0) {
