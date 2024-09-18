@@ -530,32 +530,32 @@ if (availabilityCache[cacheKey]) {
     return;
 }
 
-const url = 'https://script.google.com/macros/s/AKfycby772LLlH86ZHwsKQNmAkmvTmb2HR3RsO6U3ScLiFuRehTuyogIBnIttKsF3CBHdII1/exec' + 
-            `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
+    const url = 'https://script.google.com/macros/s/AKfycbykwSkt3GkcsmAQ0swtd2DuBkzrDlYQB0UOgd3UXMGfkf3wmh9RcBQDOHCfIhM4rJbS9A/exec' + 
+                `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
 
-try {
-    showLoadingSpinner(); // Show loading spinner
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
+    try {
+        showLoadingSpinner(); // Show loading spinner
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
 
-    // 営業日の情報を抽出
-    const businessDays = data.filter(event => event.summary === "営業日").map(event => {
-        return {
-            start: new Date(event.startTime),
-            end: new Date(event.endTime)
-        };
-    });
+        // 営業日の情報を抽出
+        const businessDays = data.filter(event => event.summary === "営業日").map(event => {
+            return {
+                start: new Date(event.startTime),
+                end: new Date(event.endTime)
+            };
+        });
 
-    // データをキャッシュに保存
-    availabilityCache[cacheKey] = { availability: data, businessDays: businessDays };
+        // データをキャッシュに保存
+        availabilityCache[cacheKey] = { availability: data, businessDays: businessDays };
 
-    updateCalendar(data, businessDays);
-} catch (error) {
-    console.error('Error fetching availability:', error);
-} finally {
-    hideLoadingSpinner(); // Hide loading spinner
-}
+        updateCalendar(data, businessDays);
+    } catch (error) {
+        console.error('Error fetching availability:', error);
+    } finally {
+        hideLoadingSpinner(); // Hide loading spinner
+    }
 }
 
 function updateCalendar(availability, businessDays) {
@@ -569,7 +569,7 @@ function updateCalendar(availability, businessDays) {
         '16:00'
     ];
 
-    // 初回の場合、テーブルを生成する
+    // テーブルが初期化されていない場合、時間と曜日のヘッダーを設定
     if (table.rows.length === 0) {
         for (const time of times) {
             const row = document.createElement('tr');
@@ -590,12 +590,12 @@ function updateCalendar(availability, businessDays) {
     // テーブルのヘッダーを更新
     updateCalendarHeader(currentDate);
 
-    // 各セルをリセット
+    // 各セルを空白にリセットし、クラスもリセット
     for (let row of table.rows) {
         for (let i = 1; i < row.cells.length; i++) {
             row.cells[i].textContent = '';
             row.cells[i].removeAttribute('data-date');
-            row.cells[i].classList.remove('available', 'unavailable', 'selected');
+            row.cells[i].classList.remove('available', 'unavailable', 'selected', 'blue', 'red');
         }
     }
 
@@ -648,7 +648,6 @@ for (let i = 0; i < 7; i++) {
             }
             return acc;
         }, 0);
-
 
             // 条件に応じたセルの内容設定
             if (isBusinessEventTime && count > 0) {
