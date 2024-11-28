@@ -61,6 +61,7 @@
 
         .visit-buttons,
         .symptoms,
+        .second-buttons,
         .menu-sections,
         .irradiations {
             display: flex;
@@ -71,6 +72,7 @@
 
         .visit-buttons button,
         .symptoms button,
+        .second-buttons button,
         .menu-sections button,
         .irradiations button {
             flex: 1;
@@ -86,6 +88,7 @@
 
         .visit-buttons button.active,
         .symptoms button.active,
+        .second-buttons button.active,
         .menu-sections button.active,
         .irradiations button.active {
             background-color: #444;
@@ -397,6 +400,7 @@
     </style>
 </head>
 
+
 <body>
     <div class="container">
         <h1 class="title">L'縁-リアン<br>予約フォーム</h1>
@@ -405,6 +409,12 @@
 
         <div class="label">電話番号※必須</div>
         <input type="tel" id="phone" placeholder="電話番号を入力してください">
+
+        <div class="label">2周年記念クーポン利用有無</div>
+        <div class="second-buttons">
+            <button type="button" id="firstsecondanniversary" onclick="selectsecondanniversary(this)">利用する</button>
+            <button type="button" id="repeatsecondanniversary" onclick="selectsecondanniversary(this)">利用しない</button>
+        </div>
 
         <div class="label">ご性別</div>
         <div class="visit-buttons">
@@ -571,6 +581,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script>
         let visitCount = '';
+        let secondsecondanniversaryCount = '';
         let selectedSymptom = [];  // 配列として定義
         let selectedFullDate = '';
         let currentDate = new Date();
@@ -591,6 +602,14 @@
 
             fetchAvailability(currentDate);
         });
+
+        // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
+        let secondTimes = {
+            '利用する': 30,
+            '利用しない': 0
+        };
+
+        let selectedsecondTime = 0; // 訪問回数で選択された時間
 
         // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
         let visitTimes = {
@@ -683,6 +702,8 @@
         <p>${visitCountText}</p>
         <hr>
         <p>${selectedSymptomText}</p>
+        <hr>
+        <p>${totalTimeText}</p>
         <hr>
         <p>${selectedDateText}</p>
         <hr>
@@ -1154,6 +1175,45 @@ if (treatmentId === 'treatment1') {
             updateDisplayInfo();
         }
 
+        function selectsecondanniversary(element) {
+            document.getElementById('firstsecondanniversary').classList.remove('active');
+            document.getElementById('repeatsecondanniversary').classList.remove('active');
+            element.classList.add('active');
+            secondsecondanniversaryCount = element.innerText;
+
+            // 選択された訪問回数に対応する時間を取得
+            selectedsecondanniversaryTime = secondTimes[secondsecondanniversaryCount];
+
+            console.log('選択された訪問回数の時間:', selectedsecondanniversaryTime);
+
+            // カレンダーを更新するために取得する日付を渡す
+            fetchAvailability(currentDate);
+        }
+
+        function selectDate(cell) {
+            // "unavailable" クラスが付いている場合はクリックを無効化
+            if (cell.classList.contains('unavailable')) {
+                return; // 何もせずに終了
+            }
+
+            // 既に選択されているセルの選択を解除
+            const cells = document.querySelectorAll('.calendar td');
+            cells.forEach(td => td.classList.remove('selected'));
+
+            // 新しいセルを選択状態にする
+            cell.classList.add('selected');
+
+            // 選択された日付と時間を取得
+            const selectedDay = cell.getAttribute('data-date'); // ISO形式の日付
+            const selectedTime = cell.parentElement.firstChild.textContent; // 時間
+            const date = new Date(selectedDay);
+
+            // 日付部分を「○○年○○月○○日 ○○:○○」形式に変換
+            selectedFullDate = `${date.getFullYear()}年${('0' + (date.getMonth() + 1)).slice(-2)}月${('0' + date.getDate()).slice(-2)}日 ${selectedTime}`;
+
+            // 希望日時を即座に更新
+            updateDisplayInfo();
+        }
 
         function updateTotalAmount() {
             totalAmount = menuPrice + optionsPrice; // オプションの価格も含める
@@ -1280,6 +1340,7 @@ if (treatmentId === 'treatment1') {
                 phone: document.getElementById('phone').value,
                 visitCount: visitCount,
                 selectedSymptom: selectedSymptom,
+                secondsecondanniversaryCount: secondsecondanniversaryCount,
                 irradiationsCount: irradiationsCount,
                 dates: [selectedFullDate],
                 message: document.getElementById('message').value
@@ -1294,7 +1355,7 @@ if (treatmentId === 'treatment1') {
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n2周年記念クーポン：${formData.secondsecondanniversaryCount}\nご来店回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom},${formData.irradiationsCount}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
