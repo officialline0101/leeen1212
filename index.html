@@ -1424,7 +1424,7 @@ if (treatmentId === 'treatment1') {
                 '10:00', '10:30', '11:00', '11:30',
                 '12:00', '12:30', '13:00', '13:30',
                 '14:00', '14:30', '15:00', '15:30',
-                '16:00'
+                '16:00', '16:30', '17:30', '18:00'
             ];
 
             // カレンダーに行がまだない場合、時間ごとに新しい行を作成
@@ -1496,11 +1496,11 @@ if (treatmentId === 'treatment1') {
                     slotEnd.setMinutes(slotStart.getMinutes() + menuDuration + visitDuration + irradiationsDuration);
 
                     // 18時以降に終了する予約を不可にする (17:30は可)
-                    if (slotEnd.getHours() === 16 && slotEnd.getMinutes() > 0) {
+                    if (slotEnd.getHours() === 18 && slotEnd.getMinutes() > 0) {
                         cell.textContent = '✕';
                         cell.classList.add('unavailable');
                         continue;
-                    } else if (slotEnd.getHours() > 16) {
+                    } else if (slotEnd.getHours() > 18) {
                         cell.textContent = '✕';
                         cell.classList.add('unavailable');
                         continue;
