@@ -722,6 +722,24 @@
             button.addEventListener('click', updateDisplayInfo);
         });
 
+        document.querySelectorAll('.symptoms button').forEach(button => {
+            button.addEventListener('click', () => {
+                const calendarContainer = document.querySelector('.calendar-container');
+
+                // 選択されたメニューがあればカレンダーを表示
+                if (document.querySelectorAll('.symptoms button.active').length > 0) {
+                    calendarContainer.style.display = 'block';
+                } else {
+                    // 選択が解除された場合、カレンダーを非表示
+                    calendarContainer.style.display = 'none';
+                }
+            });
+        });
+
+        // 初期状態でカレンダーを非表示にする
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.calendar-container').style.display = 'none';
+        });
 
         // 日付セルのクリックイベントで希望日時を更新
         document.querySelectorAll('.calendar td').forEach(cell => {
@@ -730,7 +748,7 @@
                 updateDisplayInfo();  // 日付を選択したら即座に表示を更新
             });
         });
-
+        
         function selectSymptom(button, treatmentId) {
             // ボタンの選択状態を切り替える
             button.classList.toggle('active');
@@ -1488,10 +1506,11 @@ if (treatmentId === 'treatment1') {
                     const slotEnd = new Date(slotStart);
                     let menuDuration = selectedMenuTime || 20;
                     let visitDuration = selectedVisitTime || 0;
+                    let secondDuration = selectedsecondanniversaryTime || 0;
                     let irradiationsDuration = selectedirradiationsTime || 0;
 
                     // メニュー時間と訪問回数の時間を合計して、終了時間を設定
-                    slotEnd.setMinutes(slotStart.getMinutes() + menuDuration + visitDuration + irradiationsDuration);
+                    slotEnd.setMinutes(slotStart.getMinutes() + menuDuration + visitDuration + secondDuration + irradiationsDuration);
 
                     // 18時以降に終了する予約を不可にする (17:30は可)
                     if (slotEnd.getHours() === 16 && slotEnd.getMinutes() > 0) {
