@@ -481,7 +481,7 @@
                 <button type="button" onclick="selectSymptom(this, 'treatment16')" data-price="1500">1パーツ脱毛体験</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment17')" data-price="3900">3パーツ脱毛体験</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment18')" data-price="5800">フェイシャル体験45分</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment19')" data-price="7700">新規様トーンヌール(漢方温熱泥湿布)</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment19')" data-price="5800">ボディートリートメント</button>
             </div>
         </div>
 
@@ -513,7 +513,7 @@
             </div>
             <div class="symptoms">
                 <button type="button" onclick="selectSymptom(this, 'treatment26')" data-price="11000">スピキュール✖️漢方フェイシャルコース</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment27')" data-price="11000">トーンヌール(漢方温熱泥湿布)</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment27')" data-price="9800">ボディトリートメント</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment28')" data-price="8800">光フォトfacialコース</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment29')" data-price="15300">エクソソームフェイシャル</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment30')" data-price="3300">脱がない子宮温活</button>
@@ -644,7 +644,7 @@
     'お顔(子供)': 60,
     'お好きなパーツ3箇所(子供)': 60,
     'オーダーメイドfacialコース': 120,
-    'トーンヌール(漢方温熱泥湿布)': 90,
+    'ボディトリートメント': 120,
     '光フォトfacialコース': 120,
     'エクソソームフェイシャル': 120,
     '脱がない子宮温活': 60,
@@ -662,7 +662,7 @@
     '3パーツ脱毛体験': 120,
     'フェイシャル体験45分': 120,
     'スピキュール✖️漢方フェイシャルコース': 90,
-    'トーンヌール(漢方温熱泥湿布)': 90
+    'ボディートリートメント': 120
 };
 
         let selectedMenuTime = 0;
@@ -703,6 +703,8 @@
         <hr>
         <p>${selectedSymptomText}</p>
         <hr>
+        <p>${totalTimeText}</p>
+        <hr>
         <p>${selectedDateText}</p>
         <hr>
         <p>${totalAmountText}</p>
@@ -722,24 +724,6 @@
             button.addEventListener('click', updateDisplayInfo);
         });
 
-        document.querySelectorAll('.symptoms button').forEach(button => {
-            button.addEventListener('click', () => {
-                const calendarContainer = document.querySelector('.calendar-container');
-
-                // 選択されたメニューがあればカレンダーを表示
-                if (document.querySelectorAll('.symptoms button.active').length > 0) {
-                    calendarContainer.style.display = 'block';
-                } else {
-                    // 選択が解除された場合、カレンダーを非表示
-                    calendarContainer.style.display = 'none';
-                }
-            });
-        });
-
-        // 初期状態でカレンダーを非表示にする
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector('.calendar-container').style.display = 'none';
-        });
 
         // 日付セルのクリックイベントで希望日時を更新
         document.querySelectorAll('.calendar td').forEach(cell => {
@@ -748,7 +732,7 @@
                 updateDisplayInfo();  // 日付を選択したら即座に表示を更新
             });
         });
-        
+
         function selectSymptom(button, treatmentId) {
             // ボタンの選択状態を切り替える
             button.classList.toggle('active');
@@ -951,11 +935,11 @@ if (treatmentId === 'treatment1') {
     );
 } else if (treatmentId === 'treatment19') {
     treatmentText.innerHTML = createTreatmentContent(
-        'トーンヌール(漢方温熱泥湿布)',
-        'https://www.dropbox.com/scl/fi/zvd9dvsdh1culbqtftt7s/line_oa_chat_250117_101154.jpg?rlkey=sq2ohw9h92bjihwv0405k54l7&st=qry8ijoz&raw=1',
-        '柏市 初導入!!!!!<br>肌で飲む漢方 <br>冷え性・むくみ・不眠症・倦怠感・婦人科系トラブル　必見！<br><br>温めた生薬配合の火山泥の保温効果で毛穴を広げ、奥まで浸透経皮吸収された生薬が体を巡り、老廃物の排泄を促します',
-        '7700円',
-        '50分'
+        'ボディートリートメント',
+        'https://www.dropbox.com/scl/fi/f8mghue0lwx7dzphrfpfz/.png?rlkey=ybtmsucgcwccj58dkp7l1al9n&st=c5d550dd&raw=1',
+        'オイルを使用し不要な老廃物や<br>ストレスを浄化し日頃のお疲れを癒していきます♪<br>※時間はカウンセリング込みの時間です',
+        '5800円',
+        '90分'
     );
 } else if (treatmentId === 'treatment20') {
     treatmentText.innerHTML = createTreatmentContent(
@@ -1015,11 +999,11 @@ if (treatmentId === 'treatment1') {
     );
 } else if (treatmentId === 'treatment27') {
     treatmentText.innerHTML = createTreatmentContent(
-        'トーンヌール(漢方温熱泥湿布)',
-        'https://www.dropbox.com/scl/fi/zvd9dvsdh1culbqtftt7s/line_oa_chat_250117_101154.jpg?rlkey=sq2ohw9h92bjihwv0405k54l7&st=qry8ijoz&raw=1',
-        '柏市 初導入!!!!!<br>肌で飲む漢方 <br>冷え性・むくみ・不眠症・倦怠感・婦人科系トラブル　必見！<br><br>温めた生薬配合の火山泥の保温効果で毛穴を広げ、奥まで浸透経皮吸収された生薬が体を巡り、老廃物の排泄を促します',
-        '11000円',
-        '50分'
+        'ボディトリートメント',
+        'https://www.dropbox.com/scl/fi/kw62zyf0sqb0pv82zc124/1722840441892-aGj4LZqj35dY9jwvEp98UJFxARQgIsE6h8fClNIurlAuep664S.png?rlkey=6fhkixv8senyhg3l7hlkmutkl&st=i1qdr14e&raw=1',
+        'お客様のお悩みに合わせた<br>オイルマッサージ<br>日々の疲れを癒します♪',
+        '9800円',
+        '60分'
     );
 } else if (treatmentId === 'treatment28') {
     treatmentText.innerHTML = createTreatmentContent(
@@ -1403,7 +1387,7 @@ if (treatmentId === 'treatment1') {
                 return;
             }
 
-            const url = 'https://script.google.com/macros/s/AKfycbxoFFYNbdKj2WZjqNy3lJBZAZznMGiwFtUNr_89u3Q6S9bs3dndXe6qA-dTA5wdvhc5DQ/exec' +
+            const url = 'https://script.google.com/macros/s/AKfycbzmK6ZpKznAdrML03FnxkDMHcbEQeR1un6yJHdVVVW5nhgbugvXKbiPAQebjtAtRhV03g/exec' +
                 `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
 
             try {
@@ -1440,7 +1424,7 @@ if (treatmentId === 'treatment1') {
                 '10:00', '10:30', '11:00', '11:30',
                 '12:00', '12:30', '13:00', '13:30',
                 '14:00', '14:30', '15:00', '15:30',
-                '16:00'
+                '16:00', '16:30', '17:30', '18:00'
             ];
 
             // カレンダーに行がまだない場合、時間ごとに新しい行を作成
@@ -1506,18 +1490,17 @@ if (treatmentId === 'treatment1') {
                     const slotEnd = new Date(slotStart);
                     let menuDuration = selectedMenuTime || 20;
                     let visitDuration = selectedVisitTime || 0;
-                    let secondDuration = selectedsecondanniversaryTime || 0;
                     let irradiationsDuration = selectedirradiationsTime || 0;
 
                     // メニュー時間と訪問回数の時間を合計して、終了時間を設定
-                    slotEnd.setMinutes(slotStart.getMinutes() + menuDuration + visitDuration + secondDuration + irradiationsDuration);
+                    slotEnd.setMinutes(slotStart.getMinutes() + menuDuration + visitDuration + irradiationsDuration);
 
                     // 18時以降に終了する予約を不可にする (17:30は可)
-                    if (slotEnd.getHours() === 16 && slotEnd.getMinutes() > 0) {
+                    if (slotEnd.getHours() === 18 && slotEnd.getMinutes() > 0) {
                         cell.textContent = '✕';
                         cell.classList.add('unavailable');
                         continue;
-                    } else if (slotEnd.getHours() > 16) {
+                    } else if (slotEnd.getHours() > 18) {
                         cell.textContent = '✕';
                         cell.classList.add('unavailable');
                         continue;
