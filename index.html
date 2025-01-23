@@ -481,7 +481,7 @@
                 <button type="button" onclick="selectSymptom(this, 'treatment16')" data-price="1500">1パーツ脱毛体験</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment17')" data-price="3900">3パーツ脱毛体験</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment18')" data-price="5800">フェイシャル体験45分</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment19')" data-price="5800">ボディートリートメント</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment19')" data-price="5800">新規様トーンヌール(漢方温熱泥湿布)</button>
             </div>
         </div>
 
@@ -513,7 +513,7 @@
             </div>
             <div class="symptoms">
                 <button type="button" onclick="selectSymptom(this, 'treatment26')" data-price="11000">スピキュール✖️漢方フェイシャルコース</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment27')" data-price="9800">ボディトリートメント</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment27')" data-price="9800">トーンヌール(漢方温熱泥湿布)</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment28')" data-price="8800">光フォトfacialコース</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment29')" data-price="15300">エクソソームフェイシャル</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment30')" data-price="3300">脱がない子宮温活</button>
@@ -644,7 +644,7 @@
     'お顔(子供)': 60,
     'お好きなパーツ3箇所(子供)': 60,
     'オーダーメイドfacialコース': 120,
-    'ボディトリートメント': 120,
+    '新規様トーンヌール(漢方温熱泥湿布)': 90,
     '光フォトfacialコース': 120,
     'エクソソームフェイシャル': 120,
     '脱がない子宮温活': 60,
@@ -662,7 +662,7 @@
     '3パーツ脱毛体験': 120,
     'フェイシャル体験45分': 120,
     'スピキュール✖️漢方フェイシャルコース': 90,
-    'ボディートリートメント': 120
+    'トーンヌール(漢方温熱泥湿布)': 90
 };
 
         let selectedMenuTime = 0;
@@ -935,11 +935,11 @@ if (treatmentId === 'treatment1') {
     );
 } else if (treatmentId === 'treatment19') {
     treatmentText.innerHTML = createTreatmentContent(
-        'ボディートリートメント',
-        'https://www.dropbox.com/scl/fi/f8mghue0lwx7dzphrfpfz/.png?rlkey=ybtmsucgcwccj58dkp7l1al9n&st=c5d550dd&raw=1',
-        'オイルを使用し不要な老廃物や<br>ストレスを浄化し日頃のお疲れを癒していきます♪<br>※時間はカウンセリング込みの時間です',
-        '5800円',
-        '90分'
+        'トーンヌール(漢方温熱泥湿布)',
+        'https://www.dropbox.com/scl/fi/zvd9dvsdh1culbqtftt7s/line_oa_chat_250117_101154.jpg?rlkey=sq2ohw9h92bjihwv0405k54l7&st=qry8ijoz&raw=1',
+        '柏市 初導入!!!!!<br>肌で飲む漢方 <br>冷え性・むくみ・不眠症・倦怠感・婦人科系トラブル　必見！<br><br>温めた生薬配合の火山泥の保温効果で毛穴を広げ、奥まで浸透経皮吸収された生薬が体を巡り、老廃物の排泄を促します',
+        '7700円',
+        '50分'
     );
 } else if (treatmentId === 'treatment20') {
     treatmentText.innerHTML = createTreatmentContent(
@@ -999,11 +999,11 @@ if (treatmentId === 'treatment1') {
     );
 } else if (treatmentId === 'treatment27') {
     treatmentText.innerHTML = createTreatmentContent(
-        'ボディトリートメント',
-        'https://www.dropbox.com/scl/fi/kw62zyf0sqb0pv82zc124/1722840441892-aGj4LZqj35dY9jwvEp98UJFxARQgIsE6h8fClNIurlAuep664S.png?rlkey=6fhkixv8senyhg3l7hlkmutkl&st=i1qdr14e&raw=1',
-        'お客様のお悩みに合わせた<br>オイルマッサージ<br>日々の疲れを癒します♪',
-        '9800円',
-        '60分'
+        'トーンヌール(漢方温熱泥湿布)',
+        'https://www.dropbox.com/scl/fi/zvd9dvsdh1culbqtftt7s/line_oa_chat_250117_101154.jpg?rlkey=sq2ohw9h92bjihwv0405k54l7&st=qry8ijoz&raw=1',
+        '柏市 初導入!!!!!<br>肌で飲む漢方 <br>冷え性・むくみ・不眠症・倦怠感・婦人科系トラブル　必見！<br><br>温めた生薬配合の火山泥の保温効果で毛穴を広げ、奥まで浸透経皮吸収された生薬が体を巡り、老廃物の排泄を促します',
+        '11000円',
+        '50分'
     );
 } else if (treatmentId === 'treatment28') {
     treatmentText.innerHTML = createTreatmentContent(
@@ -1576,26 +1576,7 @@ if (treatmentId === 'treatment1') {
                     // 各セルに予約時間をデータとして保存
                     cell.setAttribute('data-date', slotStart.toISOString());
                 }
-
-                // 20:00と21:00のセルをチェックして、連続で✕にする処理
-                for (let i = 0; i < 7; i++) {
-                    const twentyOClockRow = times.indexOf('15:30');
-                    const twentyOneOClockRow = times.indexOf('16:00');
-
-                    for (let j = twentyOClockRow; j < times.length; j++) {
-                        const cell = table.rows[j].cells[i + 1];
-                        const aboveCell = table.rows[twentyOClockRow].cells[i + 1];
-
-                        // 20:00のセルが✕なら21:00も✕にする
-                        if (aboveCell.textContent === '✕' && j >= twentyOneOClockRow) {
-                            cell.textContent = '✕';
-                            cell.classList.remove('available');
-                            cell.classList.add('unavailable');
-                        }
-                    }
-                }
             }
-
         }
 
         function updateCalendarHeader(date) {
