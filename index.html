@@ -437,12 +437,6 @@
         <div class="label">電話番号※必須</div>
         <input type="tel" id="phone" placeholder="電話番号を入力してください">
 
-        <div class="label">2周年記念クーポン利用有無</div>
-        <div class="second-buttons">
-            <button type="button" id="firstsecondanniversary" onclick="selectsecondanniversary(this)">利用する</button>
-            <button type="button" id="repeatsecondanniversary" onclick="selectsecondanniversary(this)">利用しない</button>
-        </div>
-
         <div class="label">ご性別</div>
         <div class="visit-buttons">
             <button type="button" id="firstVisit" onclick="selectVisit(this)">男性</button>
@@ -1392,7 +1386,7 @@ if (treatmentId === 'treatment1') {
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\n2周年記念クーポン：${formData.secondsecondanniversaryCount}\nご来店回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom},${formData.irradiationsCount},${formData.secondsecondanniversaryCount}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
+                text: `【予約フォーム】\nお名前：${formData.name}\n電話番号：${formData.phone}\nご来店回数：${formData.visitCount}\nメニュー：${formData.selectedSymptom},${formData.irradiationsCount},${formData.secondsecondanniversaryCount}\n希望日時：\n ${formData.dates[0]}\nメッセージ：${formData.message}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('当日キャンセルは無いようにお願いいたします。キャンセル料発生いたします。');
