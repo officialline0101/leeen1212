@@ -1745,7 +1745,7 @@ function submitForm() {
                     slotStart.setHours(parseInt(times[j].split(':')[0]), parseInt(times[j].split(':')[1]), 0, 0);
 
                     const slotEnd = new Date(slotStart);
-                    let menuDuration = selectedMenuTime || 10;
+                    let menuDuration = selectedMenuTime || 0;
                     let visitDuration = selectedVisitTime || 0;
                     let irradiationsDuration = selectedirradiationsTime || 0;
                     let couponDuration = couponTime || 0; // ★クーポン分（最大30分）を追加★
