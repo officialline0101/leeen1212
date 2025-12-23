@@ -924,6 +924,11 @@ let minutes = totalMinutes % 60;
             });
         });
 
+        // 初期状態でカレンダーを非表示にする
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.calendar-container').style.display = 'none';
+        });
+        
         function selectSymptom(button, treatmentId) {
     // ★ 日付リセット
     resetSelectedDate();
@@ -934,7 +939,9 @@ let minutes = totalMinutes % 60;
             // 選択されたオプションを取得
             const updatedSelectedButtons = document.querySelectorAll('.symptoms button.active');
             const treatmentText = document.getElementById('treatment-text');
-
+// ▼▼▼ 追加コードここから (カレンダー要素の取得) ▼▼▼
+            const calendarContainer = document.querySelector('.calendar-container');
+            // ▲▲▲ 追加コードここまで ▲▲▲
             if (updatedSelectedButtons.length === 0) {
                 // すべてのボタンの選択が解除された場合、メニュー時間を0にリセット
                 selectedMenuTime = 0;
@@ -955,6 +962,17 @@ let minutes = totalMinutes % 60;
                 selectedSymptom = [selectedMenu]; // 選択されたメニュー名を配列として保存
                 menuPrice = parseInt(button.getAttribute('data-price'), 10) || 0;  // メニューの価格を取得
             }
+
+// ▼▼▼ 追加コードここから (メニュー選択されたらカレンダーを表示) ▼▼▼
+                if(calendarContainer) {
+                    // CSSで .calendar-container は display: flex となっているため flex にします
+                    calendarContainer.style.display = 'flex'; 
+                    
+                    // (任意) カレンダーが表示されたらそこまで自動スクロールさせる場合
+                    // calendarContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // ▲▲▲ 追加コードここまで ▲▲▲
+            
 
             console.log('選択されたメニューの時間:', selectedMenuTime);
 
